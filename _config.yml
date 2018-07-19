@@ -1,0 +1,121 @@
+# SITE CONFIGURATION
+baseurl: ""
+url: "https://www.shanbing.top"
+title: shanbing-blog # site's title
+description: "白天搬砖,晚上筑梦" # used by search engines
+
+baidu-analyisis: 645bd6c1b1e8ca7e4e6f01da04586eee
+
+# THEME-SPECIFIC CONFIGURATION
+theme_settings:
+  # Meta
+  title: shanbing # blog's title
+  avatar: assets/img/triangle.svg
+  favicon: assets/favicon.ico
+  gravatar: # Email MD5 hash
+  description: shanbing blog 单兵的博客
+
+  # Header and footer text
+  header_text: > #two or three lines to describe your site
+     <h3>十年生死两茫茫，写程序，到天亮。</h3>
+  header_text_feature_image: assets/img/pexels/triangular.jpeg
+  footer_text: >
+   Powered by <a href="https://jekyllrb.com/">Jekyll</a> with <a href="/">shanbing</a><br><a href="http://www.miitbeian.gov.cn">粤ICP备18087821号</a>
+
+  # Icons
+  rss: false  # Make sure you created a feed.xml with feed.xml layout
+  email_address: "shanbing.top@gmail.com" # Full email address, e.g. "sam@example.com"
+  behance:
+  bitbucket:
+  dribbble:
+  facebook:
+  gitlab:
+  github: "shanbing2015"
+  google_plus:
+  instagram: "wulbing"
+  keybase:
+  linkedin:  # Full URL
+  pinterest:
+  reddit:
+  soundcloud:
+  stack_exchange:  # Full URL
+  steam:
+  tumblr:
+  twitter: # "twitter username"
+  vimeo:
+  wordpress:
+  youtube:
+  
+  # Sharing options 共享选项
+  share_buttons:
+    facebook: true
+    twitter: true
+    google_plus: true
+    tumblr:
+    pinterest:
+    pocket:
+    reddit: true
+    linkedin:
+    wordpress:
+    email: true
+
+  # Scripts / Features 脚本/特性
+  #google_analytics: # Tracking ID, e.g. "UA-000000-01"
+  #disqus_shortname: 
+  katex: true # Enable if using math markup
+  
+  special_page:
+    search: 
+      icon: "search" # Assuming page link and icon are the same
+      enabled: true
+    tags:
+      icon: "tags"
+      enabled: true
+  
+  # Localization strings
+  str_follow_on: "Follow on"
+  str_rss_follow: "Follow RSS feed"
+  str_share_on: "Share on"
+  str_add_to: "Add to"
+  str_email: "Email"
+  str_tweet: "Tweet"
+  str_pin_it: "Pin it"
+  str_next_post: "Next post"
+  str_previous_post: "Previous post"
+  str_next_page: "Next"
+  str_previous_page: "Prev"
+  str_continue_reading: "Continue reading" 
+  str_javascript_required_disqus: "请使用JavaScript查看评论(Please enable JavaScript to view comments.)"
+
+  # Colours, typography and padding
+  # Open the "_sass > base" folder, and open "_variables.scss"
+  google_fonts: "Source+Sans+Pro:400,700,700italic,400italic"
+
+  # Post navigation
+  post_navigation: true
+  
+  
+# PAGINATION
+paginate: 5
+paginate_path: "blog/page:num"
+
+
+# PORTFOLIO
+collections:
+  portfolio:
+    output: true
+    permalink: /:collection/:name
+  notes:
+    output: true
+    permalink: /:notes/:name
+
+
+# BUILD SETTINGS
+markdown: kramdown
+highlighter: rouge
+sass:
+  sass_dir: _sass
+  style: :compressed
+plugins: [jekyll-paginate, jekyll-seo-tag]
+#theme: type-on-strap # Uncomment if using the theme as a jekyll theme gem
+exclude: ["Gemfile", "Gemfile.lock", "type-on-strap.gemspec", "*.gem", "LICENSE", "README.md", "screenshot.png", "package.json", "node_modules", "gulpfile.js", ".idea/*"]
