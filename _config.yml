@@ -109,6 +109,13 @@ collections:
     output: true
     permalink: /:notes/:name
 
+#comment 评论配置
+comment:
+  enabled: true
+  serverUrl:
+  listUrl:
+  addUrl:
+
 
 # BUILD SETTINGS
 markdown: kramdown
