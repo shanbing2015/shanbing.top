@@ -7,53 +7,62 @@
 			{
 				"siteUrl":siteUrl,             					/* 站点地址 */
 				"postUrl":postUrl,      						/* 帖子地址 */
-				"commentName":data.replyName,                         /* 评论者名称 */
-				"commentContacts":"",    					/* 联络方式 */
-				"commentContent":data.content               /* 回复内容 */
+				"commentName":data.replyName,                   /* 评论者名称 */
+				"commentContacts":"",    						/* 联络方式 */
+				"commentContent":data.content               	/* 回复内容 */
 			};
-		console.log(saveData);
+		console.log("saveComment:"+saveData);
 	
 		$.ajax({
 			type : "POST",
 			url : url,
+			async:false,
+			cache:false,
             data : JSON.stringify(saveData),
             contentType : "application/json",
             dataType : "json",
             complete:function(msg) {
 				console.log(msg);
-                        }
-                });
+            },
+			error:function(msg){
+				
+			}
+        });
+	}
+	
+	function list(url,pageSize,pageNum){
+		var result;
+		var postUrl = window.location.pathname;
+		var siteUrl = window.location.host;
+		var listdata = 
+			{
+				"siteUrl":siteUrl,             					/* 站点地址 */
+				"postUrl":postUrl,      						/* 帖子地址 */
+				"pageSize":pageSize,                   			/* 页大小,默认10 */
+				"pageNum":pageNum    							/* 页码 */
+				
+			};
+	
+		$.ajax({
+			type : "POST",
+			url : url,
+			async:false,
+			cache:false,
+            data : JSON.stringify(listdata),
+            contentType : "application/json",
+            dataType : "json",
+            success:function(msg) {				
+				result = msg;				
+            },
+			error:function(msg){
+				console.log(msg);
+				alert(msg);
+			}
+        });
+		return result;
 	}
 	
 	function crateCommentInfo(obj){
-		/*
-		 * <div class="comment-info">
-			<header><img src="./images/img.jpg"></header>
-			<div class="comment-right">
-				<h3>匿名</h3>
-				<div class="comment-content-header"><span><i class="glyphicon glyphicon-time"></i> 2017-10-17 11:42:53</span><span><i class="glyphicon glyphicon-map-marker"></i>深圳</span></div>
-				<p class="content">mongodb 副本集配置副本集概念：就我的理解就是和主从复制 差不多，就是在主从复制的基础上多加了一个选举的机制。
-				复制集 特点：数据一致性 主是唯一的，没有Mysql 那样的双主结构大多数原则，集群存活节点小于二分之一是集群不可写，
-				只可读从库无法写入数据自动容灾通过下面的一个图来简单的了解下
-				 配置过程：一、安装mongodb安装过程略，不懂得可以看前面的教程二、创建存储目录与配置文件创...</p>
-				<div class="comment-content-footer">
-					<div class="row">
-						<div class="col-md-10">
-							<span><i class="glyphicon glyphicon-pushpin"></i> 来自:win10 </span><span><i class="glyphicon glyphicon-globe"></i> chrome 55.0.2883.87</span>
-						</div>
-						<div class="col-md-2"><span class="reply-btn">回复</span></div>
-					</div>
-				</div>
-				<div class="reply-list">
-					<div class="reply">
-						<div><a href="javascript:void(0)">匿名</a>:<a href="javascript:void(0)">@匿名</a><span>这写的是什么鬼东西。。。。</span></div>
-						<p><span>2017-10-17 11:42:53</span> <span class="reply-list-btn">回复</span></p>
-					</div>
-				</div>
-			</div>
-		</div>
-		 * */
-		
 		if(typeof(obj.time) == "undefined" || obj.time == ""){
 			obj.time = getNowDateFormat();
 		}
@@ -149,15 +158,33 @@
 			}
 		});
 	}
-	
-	
+
 	$.fn.addCommentList=function(options){
 		var defaults = {
-			data:[],
+			data:[{id:1,img:"https://www.shanbing.top/assets/images/img.jpg",replyName:"admin",content:"TSET",time:"2018-06-26 00:00:00"}],
 			add:"",
-			url: "https://www.shanbing.top/api/comment/v1/save"
+			url: "https://www.shanbing.top/api/comment/v1/",
+			pageSize: 10,
+			pageNum: 1
 		}
 		var option = $.extend(defaults, options);
+		if(option.add == ""){
+			var lists = list(option.url+"list",option.pageSize,option.pageNum);
+			//console.log(lists);
+			if(lists.errcode == 0){
+				for(var i=0;i<lists.data.list.length;i++){
+					var obj = lists.data.list[i];
+					var addObj = {
+						id:obj.commentId,
+						img:"https://www.shanbing.top/assets/images/img.jpg",
+						replyName:obj.commentName,
+						time:obj.commentDate,
+						content:obj.commentContent
+					};
+					option.data.push(addObj);
+				}
+			}
+		}
 		//加载数据
 		if(option.data.length > 0){
 			var dataList = option.data;
@@ -187,7 +214,7 @@
 		
 		//添加新数据
 		if(option.add != ""){
-			save(option.url,option.add);
+			save(option.url+"save",option.add);
 			
 			obj = option.add;
 			var str = crateCommentInfo(obj);
@@ -196,6 +223,7 @@
 			});
 		}
 	}
+	
 	
 	
 })(jQuery);

@@ -59,9 +59,6 @@ theme_settings:
     wordpress:
     email: true
 
-  # Scripts / Features 脚本/特性
-  #google_analytics: # Tracking ID, e.g. "UA-000000-01"
-  #disqus_shortname: 
   katex: true # Enable if using math markup
   
   special_page:

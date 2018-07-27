@@ -28,18 +28,13 @@ layout: default
     
 </article>
 
-<!-- Disqus -->
-{% if site.theme_settings.disqus_shortname %}
-<div class="comments">
-  {% include disqus.html %}
-</div>
-{% endif %}
 <! --评论 -->
 {% if site.comment.enabled %}
 <div class="comments">
   {% include comment.html%}
 </div>
 {% endif %}
+
 <!-- Post navigation -->
 {% if site.theme_settings.post_navigation %}
   {% include post_nav.html %}
