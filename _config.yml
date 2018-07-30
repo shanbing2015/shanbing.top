@@ -16,11 +16,9 @@ theme_settings:
   description: shanbing blog 单兵的博客
 
   # Header and footer text
-  header_text: > #two or three lines to describe your site
-     <h3>十年生死两茫茫，写程序，到天亮。</h3>
+  header_text: <h3>十年生死两茫茫，写程序，到天亮。</h3>
   header_text_feature_image: assets/img/pexels/triangular.jpeg
-  footer_text: >
-   Powered by <a href="https://jekyllrb.com/">Jekyll</a> with <a href="/">shanbing</a><br><a href="http://www.miitbeian.gov.cn">粤ICP备18087821号</a>
+  footer_text: Powered by <a href="https://jekyllrb.com/">Jekyll</a> with <a href="/">shanbing</a><br><a href="http://www.miitbeian.gov.cn">粤ICP备18087821号</a>
 
   # Icons
   rss: false  # Make sure you created a feed.xml with feed.xml layout

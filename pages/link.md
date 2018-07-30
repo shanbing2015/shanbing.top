@@ -11,6 +11,7 @@ hide: false
 [萌萌的心情日志][1] —— 赵兄的心情记录博客
 
 ### 工具
-
+[杨小杰工具箱][2]
 
 [1]: http://www.hellosw.com.cn/
+[2]: http://tools.yum6.cn/
