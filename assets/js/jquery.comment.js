@@ -185,11 +185,13 @@
 	$.fn.addCommentList=function(options){
 		var defaults = {
 			data:[
+			/*
 				{id:1,img:"https://www.shanbing.top/assets/images/img.jpg",replyName:"admin",content:"TSET",time:"2018-06-26 00:00:00",
 				 replyBody:[
 					{id:3,img:"",replyName:"test",beReplyName:"admin",content:"来啊，我们一起吃鸡",time:"2017-10-17 11:42:53",address:"",osname:"",browse:"谷歌"}
 					]
 				}
+			*/
 				],
 			add:"",
 			pageSize: 10,
@@ -202,13 +204,26 @@
 			if(lists.errcode == 0){
 				for(var i=0;i<lists.data.list.length;i++){
 					var obj = lists.data.list[i];
+					
+					var replyBody = [];
+					for(var j=0;j<obj.replys.length;j++){
+						var rePlyBodyObj = {
+								id:obj.replys[j].commentId,
+								img:"https://www.shanbing.top/assets/images/img.jpg",
+								replyName:obj.replys[j].commentName,
+								beReplyName:obj.replys[j].replyCommentName,
+								time:obj.replys[j].commentDate,
+								content:obj.replys[j].commentContent
+							}
+						replyBody.push(rePlyBodyObj);
+					}
 					var addObj = {
 						id:obj.commentId,
 						img:"https://www.shanbing.top/assets/images/img.jpg",
 						replyName:obj.commentName,
 						time:obj.commentDate,
 						content:obj.commentContent,
-						replyBody:""					
+						replyBody:replyBody					
 					};
 					option.data.push(addObj);
 				}
