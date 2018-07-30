@@ -1,6 +1,7 @@
 
 (function($){
-	function save(url,data){
+	function save(data){
+		var url = "https://www.shanbing.top/api/comment/v1/save";
 		var postUrl = window.location.pathname;
 		var siteUrl = window.location.host;
 		var saveData = 
@@ -9,7 +10,9 @@
 				"postUrl":postUrl,      						/* 帖子地址 */
 				"commentName":data.replyName,                   /* 评论者名称 */
 				"commentContacts":"",    						/* 联络方式 */
-				"commentContent":data.content               	/* 回复内容 */
+				"commentContent":data.content,               	/* 回复内容 */
+				"beReplyId":data.beReplyId,						/* 被回复id*/
+				"parentId":data.parentId
 			};
 		console.log("saveComment:"+saveData);
 	
@@ -30,7 +33,8 @@
         });
 	}
 	
-	function list(url,pageSize,pageNum){
+	function list(pageSize,pageNum){
+		var url = "https://www.shanbing.top/api/comment/v1/list";
 		var result;
 		var postUrl = window.location.pathname;
 		var siteUrl = window.location.host;
@@ -85,35 +89,38 @@
 		var el = "<div class='comment-info'>"+
 					"<header><img src='"+obj.img+"'></header>"+
 					"<div class='comment-right'>"+
-						"<h3>"+obj.replyName+"</h3>"+
+						"<span class='id' hidden>"+obj.id+"</span>"+
+						"<h4>"+obj.replyName+"</h4>"+
 						/*"<div class='comment-content-header'>"+
 							"<span><i class='glyphicon glyphicon-time'></i>"+obj.time+"</span>"+
 							address+
 						"</div>"+*/
 						"<p class='content'>"+obj.content+"</p>"+
 						"<div class='comment-content-footer'>"+
-							"<div class='row'><div class='col-md-10'>"+
-							obj.time+
+							"<div><span>"+obj.time+"</span><span class='reply-btn' style='float:right'>回复</span></div>"+
 						"</div>"+
-						/*"<div class='col-md-2'><span class='reply-btn'>回复</span></div>"+*/
-					"</div>"+
-				  "</div>"+
-				  "<div class='reply-list'>";
-		/*if(obj.replyBody != "" && obj.replyBody.length > 0){
+					"<div class='reply-list'>";
+		if(obj.replyBody != "" && obj.replyBody.length > 0){
 			var arr = obj.replyBody;
 			for(var j=0;j<arr.length;j++){
 				var replyObj = arr[j];
 				el = el+createReplyComment(replyObj);
 			}
-		}*/
+		}
 		el = el+"</div></div></div>";
 		return el;
 	}
 	
 	//返回每个回复体内容
 	function createReplyComment(reply){
-		var replyEl = "<div class='reply'><div><a href='javascript:void(0)' class='replyname'>"+reply.replyName+"</a>:<a href='javascript:void(0)'>@"+reply.beReplyName+"</a><span>"+reply.content+"</span></div>"
-						+ "<p><span>"+reply.time+"</span> <span class='reply-list-btn'>回复</span></p></div>";
+		var replyEl = "<div class='reply'>"+
+						"<div>"+
+							"<span class='id' hidden>"+reply.id+"</span>"+
+							"<span class='replyname'><b>"+reply.replyName+"</b></span><span>回复<b>"+reply.beReplyName+"</b></span>:"+
+							"<span>"+reply.content+"</span>"+
+						"</div>"+
+						"<p style='margin:0px'><span>"+reply.time+"</span> <span class='reply-list-btn' style='float:right'>回复</span></p>"+
+					   "</div>";
 		return replyEl;
 	}
 	function getNowDateFormat(){
@@ -133,43 +140,64 @@
 			return num;
 		}
 	}
+	
+	// 回复
 	function replyClick(el){
-		el.parent().parent().append("<div class='replybox'><textarea cols='80' rows='50' placeholder='来说几句吧......' class='mytextarea' ></textarea><span class='send'>发送</span></div>")
+		el.parent().parent().append("<div class='replybox' style='margin: 0em 0em 2em 0em'><textarea placeholder='来说几句吧' class='mytextarea' ></textarea><span class='send' style  = 'float:left;margin: 0px 0px 0px 10px'>发送</span></div>")
 		.find(".send").click(function(){
 			var content = $(this).prev().val();
 			if(content != ""){
 				var parentEl = $(this).parent().parent().parent().parent();
 				var obj = new Object();
 				obj.replyName="匿名";
-				if(el.parent().parent().hasClass("reply")){
-					console.log("1111");
-					obj.beReplyName = el.parent().parent().find("a:first").text();
-				}else{
-					console.log("2222");
-					obj.beReplyName=parentEl.find("h3").text();
+				obj.parentId = parentEl.find("span:first").text();
+				if(el.parent().parent().hasClass("reply")){					
+					obj.beReplyName = el.parent().parent().find("b:first").text();
+					obj.beReplyId = el.parent().parent().find("span:first").text();
+				}else{					
+					obj.beReplyName=parentEl.find("h4").text();
+					obj.beReplyId = parentEl.find("span:first").text();
 				}
 				obj.content=content;
-				obj.time = getNowDateFormat();
+				obj.time = getNowDateFormat();			
+				
+				save(obj);				
+				obj.commentId = 0;
 				var replyString = createReplyComment(obj);
+				
 				$(".replybox").remove();
 				parentEl.find(".reply-list").append(replyString).find(".reply-list-btn:last").click(function(){alert("不能回复自己");});
 			}else{
-				alert("空内容");
+				alert("不允许回复内容");
 			}
 		});
+	}
+	
+	/** url 编码解码*/
+	function htmlEncodeJQ ( str ) {
+		return $('<span/>').text( str ).html();
+	}
+ 
+	function htmlDecodeJQ ( str ) {
+		return $('<span/>').html( str ).text();
 	}
 
 	$.fn.addCommentList=function(options){
 		var defaults = {
-			data:[{id:1,img:"https://www.shanbing.top/assets/images/img.jpg",replyName:"admin",content:"TSET",time:"2018-06-26 00:00:00"}],
+			data:[
+				{id:1,img:"https://www.shanbing.top/assets/images/img.jpg",replyName:"admin",content:"TSET",time:"2018-06-26 00:00:00",
+				 replyBody:[
+					{id:3,img:"",replyName:"test",beReplyName:"admin",content:"来啊，我们一起吃鸡",time:"2017-10-17 11:42:53",address:"",osname:"",browse:"谷歌"}
+					]
+				}
+				],
 			add:"",
-			url: "https://www.shanbing.top/api/comment/v1/",
 			pageSize: 10,
 			pageNum: 1
 		}
 		var option = $.extend(defaults, options);
 		if(option.add == ""){
-			var lists = list(option.url+"list",option.pageSize,option.pageNum);
+			var lists = list(option.pageSize,option.pageNum);
 			//console.log(lists);
 			if(lists.errcode == 0){
 				for(var i=0;i<lists.data.list.length;i++){
@@ -179,7 +207,8 @@
 						img:"https://www.shanbing.top/assets/images/img.jpg",
 						replyName:obj.commentName,
 						time:obj.commentDate,
-						content:obj.commentContent
+						content:obj.commentContent,
+						replyBody:""					
 					};
 					option.data.push(addObj);
 				}
@@ -214,7 +243,10 @@
 		
 		//添加新数据
 		if(option.add != ""){
-			save(option.url+"save",option.add);
+			var htmlEncode = htmlEncodeJQ(option.add.content);
+			console.log(htmlEncode);
+			option.add.content = htmlEncode;
+			save(option.add);
 			
 			obj = option.add;
 			var str = crateCommentInfo(obj);
