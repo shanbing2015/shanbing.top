@@ -25,26 +25,27 @@ theme_settings:
   # Icons
   rss: false  # Make sure you created a feed.xml with feed.xml layout
   email_address: "shanbing.top@gmail.com" # Full email address, e.g. "sam@example.com"
-  behance:
-  bitbucket:
-  dribbble:
+  #behance:
+  #bitbucket:
+  #dribbble:
   facebook:
   gitlab:
   github: "shanbing2015"
-  google_plus:
+  #google_plus:
   instagram: "wulbing"
-  keybase:
+  #keybase:
   linkedin:  # Full URL
-  pinterest:
-  reddit:
-  soundcloud:
+  #pinterest:
+  #reddit:
+  #soundcloud:
   stack_exchange:  # Full URL
-  steam:
-  tumblr:
+  #steam:
+  #tumblr:
   twitter: # "twitter username"
-  vimeo:
-  wordpress:
-  youtube:
+  #vimeo:
+  #wordpress:
+  #youtube:
+  wechat:
   
   # Sharing options 共享选项
   share_buttons:
@@ -109,9 +110,6 @@ collections:
 #comment 评论配置
 comment:
   enabled: true
-  serverUrl:
-  listUrl:
-  addUrl:
 
 
 # BUILD SETTINGS
