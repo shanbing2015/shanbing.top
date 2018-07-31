@@ -13,11 +13,12 @@ theme_settings:
   avatar: assets/img/triangle.svg
   favicon: assets/favicon.ico
   gravatar: # Email MD5 hash
-  description: shanbing blog 单兵的博客
+  description: shanbing-blog
 
   # Header and footer text
-  header_text: <h3>十年生死两茫茫，写程序，到天亮。</h3>
-  header_text_feature_image: assets/img/pexels/triangular.jpeg
+  #header_text: <h3>十年生死两茫茫，写程序，到天亮。</h3>
+  #header_text: 八月
+  #header_text_feature_image: assets/img/pexels/triangular.jpeg
   footer_text: Powered by <a href="https://jekyllrb.com/">Jekyll</a> with <a href="/">shanbing</a><br><a href="http://www.miitbeian.gov.cn">粤ICP备18087821号</a>
 
   # Icons

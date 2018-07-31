@@ -1,7 +1,6 @@
-
 (function($){
-	function save(data){
-		var url = "https://www.shanbing.top/api/comment/v1/save";
+	function save(url,data){
+		var result;
 		var postUrl = window.location.pathname;
 		var siteUrl = window.location.host;
 		var saveData = 
@@ -14,7 +13,6 @@
 				"beReplyId":data.beReplyId,						/* 被回复id*/
 				"parentId":data.parentId
 			};
-		console.log("saveComment:"+saveData);
 	
 		$.ajax({
 			type : "POST",
@@ -24,17 +22,22 @@
             data : JSON.stringify(saveData),
             contentType : "application/json",
             dataType : "json",
-            complete:function(msg) {
-				console.log(msg);
+            success:function(data){
+				console.log("获取到的数据:"+data);
+				result = data;
+			},
+            complete:function(XMLHttpRequest,textStatus) {
+						
             },
-			error:function(msg){
-				
+			error:function(XMLHttpRequest, textStatus){
+				console.log(XMLHttpRequest);  //XMLHttpRequest.responseText    XMLHttpRequest.status   XMLHttpRequest.readyState
+				console.log(textStatus);            
 			}
         });
+		return result;
 	}
 	
-	function list(pageSize,pageNum){
-		var url = "https://www.shanbing.top/api/comment/v1/list";
+	function list(url,pageSize,pageNum){
 		var result;
 		var postUrl = window.location.pathname;
 		var siteUrl = window.location.host;
@@ -43,8 +46,7 @@
 				"siteUrl":siteUrl,             					/* 站点地址 */
 				"postUrl":postUrl,      						/* 帖子地址 */
 				"pageSize":pageSize,                   			/* 页大小,默认10 */
-				"pageNum":pageNum    							/* 页码 */
-				
+				"pageNum":pageNum    							/* 页码 */				
 			};
 	
 		$.ajax({
@@ -55,46 +57,32 @@
             data : JSON.stringify(listdata),
             contentType : "application/json",
             dataType : "json",
-            success:function(msg) {				
-				result = msg;				
+			success:function(data){
+				console.log("获取到的数据:"+data);
+				result = data;
+			},
+            complete:function(XMLHttpRequest,textStatus) {
+						
             },
-			error:function(msg){
-				console.log(msg);
-				alert(msg);
+			error:function(XMLHttpRequest, textStatus){
+				console.log(XMLHttpRequest);  //XMLHttpRequest.responseText    XMLHttpRequest.status   XMLHttpRequest.readyState
+				console.log(textStatus);            
 			}
         });
 		return result;
 	}
 	
+	
 	function crateCommentInfo(obj){
 		if(typeof(obj.time) == "undefined" || obj.time == ""){
 			obj.time = getNowDateFormat();
-		}
-
-		var address = "";
-		var osname = "";
-		/*
-		 if(typeof(obj.address) != "undefined" && obj.browse != ""){
-			address ="<span><i class='glyphicon glyphicon-map-marker'></i>"+obj.address+"</span>";
-		}
-
-		if(typeof(obj.osname) != "undefined" && obj.osname != ""){
-			osname ="<span><i class='glyphicon glyphicon-pushpin'></i> 来自:"+obj.osname+"</span>";
-		}
-		if(typeof(obj.browse) != "undefined" && obj.browse != ""){
-			el = el + "<span><i class='glyphicon glyphicon-globe'></i> "+obj.browse+"</span>";
-		}
-		*/
+		}	
 		
 		var el = "<div class='comment-info'>"+
 					"<header><img src='"+obj.img+"'></header>"+
 					"<div class='comment-right'>"+
 						"<span class='id' hidden>"+obj.id+"</span>"+
 						"<h4>"+obj.replyName+"</h4>"+
-						/*"<div class='comment-content-header'>"+
-							"<span><i class='glyphicon glyphicon-time'></i>"+obj.time+"</span>"+
-							address+
-						"</div>"+*/
 						"<p class='content'>"+obj.content+"</p>"+
 						"<div class='comment-content-footer'>"+
 							"<div><span>"+obj.time+"</span><span class='reply-btn' style='float:right'>回复</span></div>"+
@@ -117,7 +105,7 @@
 						"<div>"+
 							"<span class='id' hidden>"+reply.id+"</span>"+
 							"<span class='replyname'><b>"+reply.replyName+"</b></span><span>回复<b>"+reply.beReplyName+"</b></span>:"+
-							"<span>"+reply.content+"</span>"+
+							"<p>"+reply.content+"</p>"+
 						"</div>"+
 						"<p style='margin:0px'><span>"+reply.time+"</span> <span class='reply-list-btn' style='float:right'>回复</span></p>"+
 					   "</div>";
@@ -161,12 +149,17 @@
 				obj.content=content;
 				obj.time = getNowDateFormat();			
 				
-				save(obj);				
-				obj.commentId = 0;
-				var replyString = createReplyComment(obj);
+				var result = save("https://api.shanbing.top/comment/v1/save",obj);	
+				if(result.errcode == 0){
+					obj.commentId = 0;
+					var replyString = createReplyComment(obj);
 				
-				$(".replybox").remove();
-				parentEl.find(".reply-list").append(replyString).find(".reply-list-btn:last").click(function(){alert("不能回复自己");});
+					$(".replybox").remove();
+					parentEl.find(".reply-list").append(replyString).find(".reply-list-btn:last").click(function(){alert("不能回复自己");});
+				}else{
+					alert(result.errmsg);
+				}
+				
 			}else{
 				alert("不允许回复内容");
 			}
@@ -184,32 +177,26 @@
 
 	$.fn.addCommentList=function(options){
 		var defaults = {
-			data:[
-			/*
-				{id:1,img:"https://www.shanbing.top/assets/images/img.jpg",replyName:"admin",content:"TSET",time:"2018-06-26 00:00:00",
-				 replyBody:[
-					{id:3,img:"",replyName:"test",beReplyName:"admin",content:"来啊，我们一起吃鸡",time:"2017-10-17 11:42:53",address:"",osname:"",browse:"谷歌"}
-					]
-				}
-			*/
-				],
+			data:[],
 			add:"",
+			url:"https://api.shanbing.top/comment/v1/",
 			pageSize: 10,
 			pageNum: 1
 		}
+		var imgURL = "https://www.shanbing.top/assets/images/img.jpg";
 		var option = $.extend(defaults, options);
 		if(option.add == ""){
-			var lists = list(option.pageSize,option.pageNum);
-			//console.log(lists);
-			if(lists.errcode == 0){
-				for(var i=0;i<lists.data.list.length;i++){
-					var obj = lists.data.list[i];
+			var result = list(option.url+"list",option.pageSize,option.pageNum);
+
+			if(result.errcode == 0){
+				for(var i=0;i<result.data.list.length;i++){
+					var obj = result.data.list[i];
 					
 					var replyBody = [];
 					for(var j=0;j<obj.replys.length;j++){
 						var rePlyBodyObj = {
 								id:obj.replys[j].commentId,
-								img:"https://www.shanbing.top/assets/images/img.jpg",
+								img:imgURL,
 								replyName:obj.replys[j].commentName,
 								beReplyName:obj.replys[j].replyCommentName,
 								time:obj.replys[j].commentDate,
@@ -219,7 +206,7 @@
 					}
 					var addObj = {
 						id:obj.commentId,
-						img:"https://www.shanbing.top/assets/images/img.jpg",
+						img:imgURL,
 						replyName:obj.commentName,
 						time:obj.commentDate,
 						content:obj.commentContent,
@@ -227,9 +214,11 @@
 					};
 					option.data.push(addObj);
 				}
+			}else{
+				alert(result.errmsg);
 			}
 		}
-		//加载数据
+		//加载评论
 		if(option.data.length > 0){
 			var dataList = option.data;
 			var totalString = "";
@@ -256,18 +245,21 @@
 			})
 		}
 		
-		//添加新数据
+		//发表评论
 		if(option.add != ""){
-			var htmlEncode = htmlEncodeJQ(option.add.content);
-			console.log(htmlEncode);
+			var htmlEncode = htmlEncodeJQ(option.add.content);			
 			option.add.content = htmlEncode;
-			save(option.add);
+			var result = save(option.url+"save",option.add);
+			if(result.errcode == 0){
+				obj = option.add;
+				var str = crateCommentInfo(obj);
+				$(this).prepend(str).find(".reply-btn").click(function(){
+					replyClick($(this));
+				});
+			}else{
+				alert(result.errmsg);
+			}		
 			
-			obj = option.add;
-			var str = crateCommentInfo(obj);
-			$(this).prepend(str).find(".reply-btn").click(function(){
-				replyClick($(this));
-			});
 		}
 	}
 	

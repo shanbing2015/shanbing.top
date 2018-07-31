@@ -13,5 +13,15 @@ hide: false
 ### 工具
 [杨小杰工具箱][2]
 
+[阿里云控制台][3]
+
+[作业部落][4]
+
+### 技术站
+[v2ex][5]
+
 [1]: http://www.hellosw.com.cn/
 [2]: http://tools.yum6.cn/
+[3]: https://account.aliyun.com/
+[4]: https://www.zybuluo.com/
+[5]: https://neue.v2ex.com/
