@@ -1,6 +1,6 @@
 # SITE CONFIGURATION
 baseurl: ""
-url: "https://www.shanbing.top"
+url: "http://test.shanbing.top"
 title: shanbing-blog # site's title
 description: "白天搬砖,晚上筑梦" # used by search engines
 

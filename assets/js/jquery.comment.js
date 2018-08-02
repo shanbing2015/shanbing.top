@@ -179,7 +179,7 @@
 		var defaults = {
 			data:[],
 			add:"",
-			url:"https://api.shanbing.top/comment/v1/",
+			url:"http://api.shanbing.top/comment/v1/",
 			pageSize: 10,
 			pageNum: 1
 		}
