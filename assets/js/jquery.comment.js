@@ -149,7 +149,7 @@
 				obj.content=content;
 				obj.time = getNowDateFormat();			
 				
-				var result = save("https://api.shanbing.top/comment/v1/save",obj);	
+				var result = save("http://api.shanbing.top/comment/v1/save",obj);	
 				if(result.errcode == 0){
 					obj.commentId = 0;
 					var replyString = createReplyComment(obj);
@@ -183,7 +183,7 @@
 			pageSize: 10,
 			pageNum: 1
 		}
-		var imgURL = "https://www.shanbing.top/assets/images/img.jpg";
+		var imgURL = "/assets/images/img.jpg";
 		var option = $.extend(defaults, options);
 		if(option.add == ""){
 			var result = list(option.url+"list",option.pageSize,option.pageNum);
