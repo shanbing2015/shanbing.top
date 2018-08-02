@@ -149,7 +149,7 @@
 				obj.content=content;
 				obj.time = getNowDateFormat();			
 				
-				var result = save("http://api.shanbing.top/comment/v1/save",obj);	
+				var result = save("https://api.shanbing.top/comment/v1/save",obj);	
 				if(result.errcode == 0){
 					obj.commentId = 0;
 					var replyString = createReplyComment(obj);
