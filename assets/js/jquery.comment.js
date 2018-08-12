@@ -157,7 +157,7 @@
 					$(".replybox").remove();
 					parentEl.find(".reply-list").append(replyString).find(".reply-list-btn:last").click(function(){alert("不能回复自己");});
 				}else{
-					alert(result.errmsg);
+					console.log(result.errmsg);
 				}
 				
 			}else{
@@ -215,7 +215,7 @@
 					option.data.push(addObj);
 				}
 			}else{
-				alert(result.errmsg);
+				console.log(result.errmsg);
 			}
 		}
 		//加载评论
@@ -257,7 +257,7 @@
 					replyClick($(this));
 				});
 			}else{
-				alert(result.errmsg);
+				console.log(result.errmsg);
 			}		
 			
 		}

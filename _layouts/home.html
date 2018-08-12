@@ -20,13 +20,13 @@ layout: default
       {% endif %}
       <span>
           <header>
-            <h1>
+            <h2>
               <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">
                 {{ post.title }}
               </a>
-            </h1>
+            </h2>
             <p class="meta">
-              {{ post.date | date: "%B %-d, %Y" }}
+              {{ post.date |date: "%Y-%m-%d" }}
             </p>
           </header>
           <div class="excerpt">
